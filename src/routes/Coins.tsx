@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import { useQuery } from "react-query";
 import { Link } from "react-router-dom";
-import { useSetRecoilState } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import styled from "styled-components";
 import { fetchCoins } from "../api";
 import { isDarkAtom } from "../atom";
@@ -87,6 +87,7 @@ const ToggleBtn = styled.button`
 
 function Coins() {
   const { isLoading, data } = useQuery<ICoin[]>("allCoins", fetchCoins);
+  const isDark = useRecoilValue(isDarkAtom);
   const setDarkFn = useSetRecoilState(isDarkAtom);
   const toggleBtn = () => setDarkFn((prev) => !prev);
   return (
@@ -97,7 +98,9 @@ function Coins() {
       <Header>
         <Title>Coin</Title>
       </Header>
-      <ToggleBtn onClick={toggleBtn}>darkmode</ToggleBtn>
+      <ToggleBtn onClick={toggleBtn}>
+        {isDark ? "Light mode" : "Dark mode"}
+      </ToggleBtn>
       {isLoading ? (
         <Loading>Loading...</Loading>
       ) : (
